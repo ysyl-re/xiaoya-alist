@@ -29,28 +29,6 @@
 ### 使用
 
 ```shell
-bash -c "$(curl --insecure -fsSL https://ddsrem.com/xiaoya_install.sh)"
-```
-
-**备用地址**
-
-```shell
-bash <(curl --insecure -fsSL https://ddsrem.com/xiaoya/all_in_one.sh)
-```
-
-```shell
-bash <(curl --insecure -fsSL https://fastly.jsdelivr.net/gh/xiaoyaDev/xiaoya-alist@latest/all_in_one.sh)
-```
-
-```shell
-bash <(curl --insecure -fsSL https://raw.githubusercontent.com/xiaoyaDev/xiaoya-alist/master/all_in_one.sh)
-```
-
-```shell
-bash -c "$(curl --insecure -fsSL https://fastly.jsdelivr.net/gh/xiaoyaDev/xiaoya-alist@latest/main.sh)"
-```
-
-```shell
 bash -m <(curl --insecure -fsSL https://raw.githubusercontent.com/ysyl-re/xiaoya-alist/refs/heads/master/all_in_one.sh)
 ```
 
