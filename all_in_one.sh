@@ -4942,7 +4942,15 @@ function main_xiaoya_all_emby() {
 
 function xiaoyahelper_install_check() {
     local URL="$1"
-    if bash -c "$(curl --insecure -fsSL -k ${URL} | tail -n +2)" -s "${MODE}" ${TG_CHOOSE}; then
+    
+    # 核心修改说明：
+    # 1. 使用 <(...) 替代 "$(...)"：解决 "argument list too long" 报错
+    # 2. 添加 -m：强制开启 Job Control，尝试解决 wait 死循环
+    # 3. 去掉 -s：因为在文件模式下，$0 是文件名，必须把 MODE 顶到 $1 的位置
+    
+    if bash -m <(curl --insecure -fsSL -k "${URL}" | tail -n +2) "${MODE}" ${TG_CHOOSE}; then
+        
+        # 下面保持原样
         if docker container inspect xiaoyakeeper > /dev/null 2>&1; then
             INFO "安装完成！"
             return 0
