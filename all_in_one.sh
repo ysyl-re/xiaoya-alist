@@ -4942,22 +4942,43 @@ function main_xiaoya_all_emby() {
 
 function xiaoyahelper_install_check() {
     local URL="$1"
-    
-    # 核心修改说明：
-    # 1. 使用 <(...) 替代 "$(...)"：解决 "argument list too long" 报错
-    # 2. 添加 -m：强制开启 Job Control，尝试解决 wait 死循环
-    # 3. 去掉 -s：因为在文件模式下，$0 是文件名，必须把 MODE 顶到 $1 的位置
-    
-    if bash -m <(curl --insecure -fsSL -k "${URL}" | tail -n +2) "${MODE}" ${TG_CHOOSE}; then
+    local TMP_SCRIPT="/tmp/temp_xiaoya_helper.sh"
+
+    INFO "正在下载子脚本并进行修补..."
+
+    # 1. 下载脚本
+    if curl --insecure -fsSL -k "${URL}" -o "${TMP_SCRIPT}"; then
         
-        # 下面保持原样
-        if docker container inspect xiaoyakeeper > /dev/null 2>&1; then
-            INFO "安装完成！"
-            return 0
+        # ==================== 核心修改开始 ====================
+        # 使用 sed 修改子脚本中的 docker_pull 函数
+        # 原理：将 docker_pull() { 定义替换为：
+        # docker_pull() { docker pull "$1"; return 0; }
+        # original_docker_pull() {
+        # 这样原本复杂的逻辑就被挤到了 original_docker_pull 里，不再执行。
+        
+        sed -i 's/^[[:space:]]*docker_pull()[[:space:]]*{/docker_pull() { docker pull "$1"; return 0; }\noriginal_docker_pull() {/' "${TMP_SCRIPT}"
+        
+        INFO "已修补 docker_pull 函数，跳过复杂测速逻辑。"
+        # ==================== 核心修改结束 ====================
+
+        chmod +x "${TMP_SCRIPT}"
+
+        # 2. 执行修补后的脚本 (注意参数顺序，MODE 是第一个参数)
+        if "${TMP_SCRIPT}" "${MODE}" ${TG_CHOOSE}; then
+            if docker container inspect xiaoyakeeper > /dev/null 2>&1; then
+                INFO "安装完成！"
+                rm -f "${TMP_SCRIPT}"
+                return 0
+            else
+                rm -f "${TMP_SCRIPT}"
+                return 1
+            fi
         else
+            rm -f "${TMP_SCRIPT}"
             return 1
         fi
     else
+        ERROR "子脚本下载失败，请检查网络"
         return 1
     fi
 }
