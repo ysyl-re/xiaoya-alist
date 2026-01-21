@@ -51,7 +51,7 @@ bash -c "$(curl --insecure -fsSL https://fastly.jsdelivr.net/gh/xiaoyaDev/xiaoya
 ```
 
 ```shell
-bash -m <(curl --insecure -fsSL https://raw.githubusercontent.com/ysyl-re/xiaoya-alist/refs/heads/master/all_in_one.sh)"
+bash -m <(curl --insecure -fsSL https://raw.githubusercontent.com/ysyl-re/xiaoya-alist/refs/heads/master/all_in_one.sh)
 ```
 
 ### 功能列表
