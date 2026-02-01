@@ -24,10 +24,10 @@ export PATH
 DATE_VERSION="v1.8.4-2025_06_14_19_04"
 #
 # ——————————————————————————————————————————————————————————————————————————————————
-amilys_embyserver_latest_version=4.9.1.90
+amilys_embyserver_latest_version=4.9.3.0
 emby_embyserver_latest_version=4.9.3.0
 amilys_embyserver_beta_version=4.9.4.1
-emby_embyserver_beta_version=4.9.4.1
+emby_embyserver_beta_version=4.10.0.2
 # ——————————————————————————————————————————————————————————————————————————————————
 
 Sky_Blue="\033[36m"
@@ -1975,8 +1975,8 @@ function test_disk_capacity() {
         WARN "您已设置跳过磁盘容量检测"
         INFO "磁盘容量：${free_size_G}G"
     else
-        if [ "$free_size" -le 193986560 ]; then
-            ERROR "空间剩余容量不够：${free_size_G}G 小于最低要求 185G"
+        if [ "$free_size" -le 262144000 ]; then
+            ERROR "空间剩余容量不够：${free_size_G}G 小于最低要求 250G"
             exit 1
         else
             INFO "磁盘容量：${free_size_G}G"
